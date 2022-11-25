@@ -4,7 +4,7 @@
 \alias{gtf_predict}
 \title{Compute aggregated p-value per group of p-values resulting from independent tests.}
 \usage{
-gtf_predict(dataset, group_col, pval_col, ..., k = 5, n = 10000)
+gtf_predict(dataset, group_col, pval_col, ..., k = 5, n = 1000)
 }
 \arguments{
 \item{dataset}{a tibble or dataframe}

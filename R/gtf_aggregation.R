@@ -51,7 +51,7 @@ gtf_pval = function(gtf_score, k, size, n, pb = function() {
 #' })
 #'
 #' @export
-gtf_predict = function(dataset, group_col, pval_col, ..., k = 5, n = 10000) {
+gtf_predict = function(dataset, group_col, pval_col, ..., k = 5, n = 1000) {
   grp_data = dataset %>% group_by({{ group_col }})
 
   if (requireNamespace("progress", quietly = TRUE)) {
