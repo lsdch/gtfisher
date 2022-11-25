@@ -15,8 +15,8 @@ devtools::install_github("https://github.com/lsdch/gtfisher")
 # optional 
 install.packages("progressr")
 ```
-Computation of scores is fast, but can take a few minutes on large datasets. 
-This packages implements progress signaling using #[progressr](https://github.com/HenrikBengtsson/progressr), 
+Computation of scores is fast, but can take a few minutes on large datasets, and takes longer when the simulated sample size is chosen large (see `n` parameter in `gtf_predict()`). 
+This packages implements progress signaling using [progressr](https://github.com/HenrikBengtsson/progressr), 
 which gives freedom to the user on how progress should be reported. 
 
 
