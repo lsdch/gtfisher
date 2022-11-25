@@ -8,7 +8,7 @@ fisher_score = function(pvals) {
 gtf_pval = function(gtf_score, k, size, n, pb = function() {
                       NULL
                     }) {
-  # Workaround for genes having less than `k` non constant sites
+  # Workaround for group having less than `k` p-values
   k = min(k, size)
   # Simulated null distribution
   null_scores = sapply(c(1:n), function(x) {
@@ -27,38 +27,32 @@ gtf_pval = function(gtf_score, k, size, n, pb = function() {
 }
 
 
-#' Compute gene-level p-values from Pelican site-wise p-values.
+#' Compute aggregated p-value per group of p-values resulting from independent tests.
 #'
-#' Computation of gene p-values is performed using the so-called
-#' "Genewise Truncated Fisher" method.
-#' It consists in compute a Fisher score on the best ranking p-values within each gene,
-#' and use an empirical distribution of this score to calculate a p-value
-#' for the corresponding gene.
-#' @param dataset a tibble or dataframe that contains site p-values for a collection of genes
-#' @param ali_col column of gene identifier
-#' @param pval_col column of site p-values
-#' @param naa_col column that contains the number of distinct amino acid at each site
-#' @param k the number of best ranking p-values to consider at each gene
+#' Computation of aggregated p-values is performed using the so-called
+#' "Groupwise Truncated Fisher" method.
+#' It consists in compute a Fisher score on the best ranking p-values within each group,
+#' then use an empirical distribution of this score to calculate a p-value
+#' for the corresponding group.
+#' @param dataset a tibble or dataframe
+#' @param group_col column of the grouping variable
+#' @param pval_col column of p-values
+#' @param ... filtering condition as in dplyr::filter
+#' @param k the number of best ranking p-values to consider in each group
 #' @param n the sample size to use in the empirical null distribution
 #' @examples
-#' site_pvals = read_tsv("/path/to/pelican/output/all_sites.tsv")
 #' # no progress bar
-#' gene_predictions = site_pvals %>% gtf_predict()
+#' group_pvals = gtf_predict(pvals, group, p)
 #'
 #' # with progress bar
 #' handlers("progress") # pick your favorite one, see `progressr` vignette
 #' with_progress({
-#'   gene_predictions = site_pvals %>% gtf_predict()
+#'   group_pvals = gtf_predict(pvals, group, p)
 #' })
 #'
 #' @export
-gtf_predict = function(dataset,
-                       ali_col = alignment,
-                       pval_col = aagtr_pval,
-                       naa_col = naa,
-                       k = 5,
-                       n = 10000) {
-  grp_data = dataset %>% group_by({{ ali_col }})
+gtf_predict = function(dataset, group_col, pval_col, ..., k = 5, n = 10000) {
+  grp_data = dataset %>% group_by({{ group_col }})
 
   if (requireNamespace("progress", quietly = TRUE)) {
     p <- progressr::progressor(steps = n_groups(grp_data))
@@ -67,10 +61,11 @@ gtf_predict = function(dataset,
   }
 
   grp_data %>%
+    filter(...) %>%
     summarize(
-      size_non_constant = sum({{ naa_col }} > 1),
-      gtf_score = fisher_score(DescTools::Small(aagtr_pval, k)),
-      gtf_pval = gtf_pval(gtf_score, k, size_non_constant, n = n, pb = p),
+      size = n(),
+      gtf_score = fisher_score(DescTools::Small({{ pval_col }}, k)),
+      gtf_pval = gtf_pval(gtf_score, k = k, size = size, n = n, pb = p),
       .groups = "keep"
     ) %>%
     arrange(gtf_pval, desc(gtf_score))

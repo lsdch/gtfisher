@@ -2,46 +2,38 @@
 % Please edit documentation in R/gtf_aggregation.R
 \name{gtf_predict}
 \alias{gtf_predict}
-\title{Compute gene-level p-values from Pelican site-wise p-values.}
+\title{Compute aggregated p-value per group of p-values resulting from independent tests.}
 \usage{
-gtf_predict(
-  dataset,
-  ali_col = alignment,
-  pval_col = aagtr_pval,
-  naa_col = naa,
-  k = 5,
-  n = 10000
-)
+gtf_predict(dataset, group_col, pval_col, ..., k = 5, n = 10000)
 }
 \arguments{
-\item{dataset}{a tibble or dataframe that contains site p-values for a collection of genes}
+\item{dataset}{a tibble or dataframe}
 
-\item{ali_col}{column of gene identifier}
+\item{group_col}{column of the grouping variable}
 
-\item{pval_col}{column of site p-values}
+\item{pval_col}{column of p-values}
 
-\item{naa_col}{column that contains the number of distinct amino acid at each site}
+\item{...}{filtering condition as in dplyr::filter}
 
-\item{k}{the number of best ranking p-values to consider at each gene}
+\item{k}{the number of best ranking p-values to consider in each group}
 
 \item{n}{the sample size to use in the empirical null distribution}
 }
 \description{
-Computation of gene p-values is performed using the so-called
-"Genewise Truncated Fisher" method.
-It consists in compute a Fisher score on the best ranking p-values within each gene,
-and use an empirical distribution of this score to calculate a p-value
-for the corresponding gene.
+Computation of aggregated p-values is performed using the so-called
+"Groupwise Truncated Fisher" method.
+It consists in compute a Fisher score on the best ranking p-values within each group,
+then use an empirical distribution of this score to calculate a p-value
+for the corresponding group.
 }
 \examples{
-site_pvals = read_tsv("/path/to/pelican/output/all_sites.tsv")
 # no progress bar
-gene_predictions = site_pvals \%>\% gtf_predict()
+group_pvals = gtf_predict(pvals, group, p)
 
 # with progress bar
 handlers("progress") # pick your favorite one, see `progressr` vignette
 with_progress({
-  gene_predictions = site_pvals \%>\% gtf_predict()
+  group_pvals = gtf_predict(pvals, group, p)
 })
 
 }

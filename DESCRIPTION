@@ -1,15 +1,16 @@
 Package: gtfisher
-Title: Genewise Truncated Fisher Score For Pelican Gene Predictions
+Title: Groupwise Truncated Fisher Score
 Version: 1.0.0
 Authors@R:
     person("Louis", "Duchemin", , "ls.duchemin@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7984-9554"))
 Description:
-  Implements the Genewise Truncated Fisher (GTF) score to compute gene-level \
-  p-values from site wise p-values output from Pelican software. \
+  Implements the Groupwise Truncated Fisher (GTF) score to compute group-level \
+  p-values from independant p-values. \
   It is designed as an alternative to Fisher's method, that does not suffer as much \
   from the non uniformity of p-values under the null hypothesis. \
-  The API is designed to integrate with the package `dplyr`.
+  The API is designed to integrate with the package `dplyr`, \
+  and optionally with `progressr`.
 License: use_gpl3_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -19,3 +20,5 @@ Imports:
   DescTools (>= 0.99.47)
 Suggests:
   progressr (>= 0.11.0)
+URL: https://github.com/lsdch/gtfisher
+BugReports: https://github.com/lsdch/gtfisher/issues
