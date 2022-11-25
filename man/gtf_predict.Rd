@@ -13,7 +13,7 @@ gtf_predict(dataset, group_col, pval_col, ..., k = 5, n = 10000)
 
 \item{pval_col}{column of p-values}
 
-\item{...}{filtering condition as in dplyr::filter}
+\item{...}{filtering condition as in \code{\link[dplyr:filter]{dplyr::filter()}}}
 
 \item{k}{the number of best ranking p-values to consider in each group}
 

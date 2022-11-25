@@ -37,7 +37,7 @@ gtf_pval = function(gtf_score, k, size, n, pb = function() {
 #' @param dataset a tibble or dataframe
 #' @param group_col column of the grouping variable
 #' @param pval_col column of p-values
-#' @param ... filtering condition as in dplyr::filter
+#' @param ... filtering condition as in [dplyr::filter()]
 #' @param k the number of best ranking p-values to consider in each group
 #' @param n the sample size to use in the empirical null distribution
 #' @examples
