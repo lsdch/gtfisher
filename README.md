@@ -24,7 +24,7 @@ which gives freedom to the user on how progress should be reported.
 
 ```R
 library(gtfisher)
-library(progressr) # optiona
+library(progressr) # optional
 
 # no progress bar
 group_pvals = gtf_predict(pvals, group, p)
