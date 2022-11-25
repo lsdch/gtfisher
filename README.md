@@ -1,6 +1,6 @@
 # Groupwise Truncated Fisher (GTF)
 
-Implements the Groupwise Truncated Fisher (GTF) score to aagregate
+Implements the Groupwise Truncated Fisher (GTF) score to aggregate
 groups of p-values from independent tests into a single p-value per group, using an approach derived from Fisher's method.
 It is designed as an alternative to Fisher's method, that does not suffer as much
 from the non uniformity of p-values under the null hypothesis, 
