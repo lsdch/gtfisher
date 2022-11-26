@@ -1,9 +1,10 @@
 Package: gtfisher
 Title: Groupwise Truncated Fisher Score
 Version: 1.0.0
-Authors@R:
+Authors@R: c(
     person("Louis", "Duchemin", , "ls.duchemin@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-7984-9554"))
+           comment = c(ORCID = "0000-0002-7984-9554")),
+    person("Philippe", "Veber", role = c("aut")))
 Description:
   Implements the Groupwise Truncated Fisher (GTF) score to compute group-level \
   p-values from independant p-values. \
