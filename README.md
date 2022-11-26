@@ -5,7 +5,7 @@ groups of p-values from independent tests into a single p-value per group, using
 It is designed as an alternative to Fisher's method, that does not suffer as much
 from the non uniformity of p-values under the null hypothesis, 
 and is expected to work well as long as there is not an enrichment in very low p-values under the null.
-The API is designed to integrate with the package `dplyr`, and optionally the package `progressr`
+The API is designed to integrate with the package [dplyr](https://cran.r-project.org/web/packages/dplyr/), and optionally the package [progressr](https://cran.r-project.org/web/packages/progressr/index.html)
 
 ## Installation
 
@@ -16,7 +16,7 @@ devtools::install_github("https://github.com/lsdch/gtfisher")
 install.packages("progressr")
 ```
 Computation of scores is fast, but can take a few minutes on large datasets, and takes longer when the simulated sample size is chosen large (see `n` parameter in `gtf_predict()`). 
-This packages implements progress signaling using [progressr](https://github.com/HenrikBengtsson/progressr), 
+This package implements progress signaling using [progressr](https://github.com/HenrikBengtsson/progressr), 
 which gives freedom to the user on how progress should be reported. 
 
 
@@ -30,7 +30,7 @@ library(progressr) # optional
 group_pvals = gtf_predict(pvals, group, p)
 
 # with progress bar
-handlers("progress") # pick your favorite one, see `progressr` vignette
+handlers("progress") # pick your favorite one
 with_progress({
   group_pvals = gtf_predict(pvals, group, p)
 })
