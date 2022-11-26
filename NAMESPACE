@@ -2,4 +2,6 @@
 
 export(fisher_score)
 export(gtf_predict)
+import(data.table)
 import(dplyr)
+import(dtplyr)

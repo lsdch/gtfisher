@@ -19,6 +19,9 @@ gtf_predict(dataset, group_col, pval_col, ..., k = 5, n = 1000)
 
 \item{n}{the sample size to use in the empirical null distribution}
 }
+\value{
+a tibble with columns \link{ <group_col> ; size ; gtf_pval ; gtf_score}
+}
 \description{
 Computation of aggregated p-values is performed using the so-called
 "Groupwise Truncated Fisher" method.

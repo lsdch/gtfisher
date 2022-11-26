@@ -1,4 +1,6 @@
 #' @import dplyr
+#' @import dtplyr
+#' @import data.table
 
 #' @export
 fisher_score = function(pvals) {
@@ -40,6 +42,8 @@ gtf_pval = function(gtf_score, k, size, n, pb = function() {
 #' @param ... filtering condition as in [dplyr::filter()]
 #' @param k the number of best ranking p-values to consider in each group
 #' @param n the sample size to use in the empirical null distribution
+#'
+#' @return a tibble with columns [ <group_col> ; size ; gtf_pval ; gtf_score]
 #' @examples
 #' # no progress bar
 #' group_pvals = gtf_predict(pvals, group, p)
@@ -60,13 +64,16 @@ gtf_predict = function(dataset, group_col, pval_col, ..., k = 5, n = 1000) {
     p = function() NULL
   }
 
-  grp_data %>%
+  lazy_dt(grp_data) %>%
     filter(...) %>%
     summarize(
       size = n(),
       gtf_score = fisher_score(DescTools::Small({{ pval_col }}, k)),
-      gtf_pval = gtf_pval(gtf_score, k = k, size = size, n = n, pb = p),
       .groups = "keep"
     ) %>%
-    arrange(gtf_pval, desc(gtf_score))
+    mutate(
+      gtf_pval = gtf_pval(gtf_score, k = k, size = size, n = n, pb = p)
+    ) %>%
+    arrange(gtf_pval, desc(gtf_score)) %>%
+    as_tibble()
 }
