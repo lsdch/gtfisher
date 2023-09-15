@@ -77,3 +77,46 @@ gtf_predict = function(dataset, group_col, pval_col, ..., k = 5, n = 1000) {
     arrange(gtf_pval, desc(gtf_score)) %>%
     as_tibble()
 }
+
+
+bootstrap = function(
+    score, pvals, size, k, n = 1000,
+    pb = function() {
+      NULL
+    }) {
+  scores = sapply(
+    c(1:n),
+    function(i) {
+      sample(pvals, size) %>%
+        DescTools::Small(k) %>%
+        fisher_score()
+    }
+  )
+  pb()
+  sum(scores < score) / n
+}
+
+#' @export
+gtf_bootstrap = function(dataset, group_col, pval_col, ..., k = 5, n = 1000) {
+  grp_data = dataset %>% group_by({{ group_col }})
+
+  if (requireNamespace("progress", quietly = TRUE)) {
+    p <- progressr::progressor(steps = n_groups(grp_data))
+  } else {
+    p = function() NULL
+  }
+
+  pvals = dataset %>% pull({{ pval_col }})
+
+  dtplyr::lazy_dt(grp_data) %>%
+    filter(...) %>%
+    summarize(
+      size = n(),
+      # gtf_score = fisher_score(DescTools::Small({{ pval_col }}, k)),
+      gtf_pval = fisher_score(DescTools::Small({{ pval_col }}, k)) %>%
+        bootstrap(pvals, n(), k, n, p),
+      .groups = "keep"
+    ) %>%
+    arrange(gtf_pval) %>%
+    as_tibble()
+}
